@@ -4,12 +4,13 @@ import fracty from 'fracty';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #message = '';
+  #errorMessage = 'We could not find your recipe. Please try another one!';
 
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.#renderMarkup(markup);
   }
 
   renderSpinner() {
@@ -20,8 +21,35 @@ class RecipeView {
       </svg>
     </div>
   `;
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.#renderMarkup(markup);
+  }
+
+  renderMessage(message = this.#message) {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#renderMarkup(markup);
+  }
+
+  renderError(message = this.#errorMessage) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#renderMarkup(markup);
   }
 
   addHandlerRender(handler) {
@@ -30,8 +58,9 @@ class RecipeView {
     );
   }
 
-  #clear() {
+  #renderMarkup(markup) {
     this.#parentElement.innerHTML = '';
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   #generateMarkup() {

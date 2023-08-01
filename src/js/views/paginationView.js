@@ -19,7 +19,7 @@ class PaginationView extends View {
       this._data.results.length / this._data.resultsPerPage
     );
 
-    if (numPages === 1) return '';
+    if (numPages < 2) return '';
 
     const btnPrev = `
       <button class="btn--inline pagination__btn--prev" data-go-to=${

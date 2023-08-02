@@ -57,6 +57,7 @@ const controlPagination = function (pageNumber) {
 const controlServings = function (newServings) {
   model.updateServings(newServings);
   recipeView.update(model.state.recipe);
+  model.updateBookmark(model.state.recipe);
 };
 
 const controlAddBookmark = function () {

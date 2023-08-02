@@ -23,11 +23,16 @@ export const loadRecipe = async function (id) {
       publisher: recipe.publisher,
       sourceUrl: recipe.source_url,
       image: recipe.image_url,
-      servings: recipe.servings,
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients,
-      bookmarked: state.bookmarks.some(el => el.id === recipe.id),
     };
+
+    const bookmarkedRecipe = state.bookmarks.find(el => el.id === recipe.id);
+    state.recipe.bookmarked = Boolean(bookmarkedRecipe);
+
+    state.recipe.servings = state.recipe.bookmarked
+      ? bookmarkedRecipe.servings
+      : recipe.servings;
   } catch (err) {
     throw err;
   }
@@ -83,6 +88,14 @@ export const removeBookmark = function (recipe) {
   const index = state.bookmarks.findIndex(el => el.id === recipe.id);
   state.bookmarks.splice(index, 1);
   state.recipe.bookmarked = false;
+  persistBookmarks();
+};
+
+export const updateBookmark = function (recipe) {
+  if (!recipe.bookmarked) return;
+
+  const index = state.bookmarks.findIndex(el => el.id === recipe.id);
+  state.bookmarks.splice(index, 1, recipe);
   persistBookmarks();
 };
 

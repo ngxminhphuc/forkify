@@ -97,7 +97,6 @@
   cursor: pointer;
   height: 4.5rem;
   width: 4.5rem;
-  // margin-left: auto;
   transition: all 0.2s;
 
   display: flex;
@@ -110,6 +109,10 @@
 
   &:focus {
     outline: none;
+  }
+
+  &:not(:last-child) {
+    margin-right: auto;
   }
 
   svg {

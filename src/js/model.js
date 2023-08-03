@@ -67,7 +67,15 @@ export const loadSearchResults = async function (query) {
   }
 };
 
-export const getSearchResults = function (page = state.search.currentPage) {
+export const getSearchResults = function (
+  pageNumber = state.search.currentPage
+) {
+  let page = pageNumber;
+  while (
+    page > Math.ceil(state.search.results.length / state.search.resultsPerPage)
+  )
+    --page;
+
   state.search.currentPage = page;
 
   const start = state.search.resultsPerPage * (page - 1);
@@ -139,9 +147,18 @@ export const uploadRecipe = async function (recipe) {
       ingredients,
     };
 
-    const data = await AJAX(`${API_URL}?key=${KEY}`, newRecipe);
+    const data = await AJAX(`${API_URL}?key=${KEY}`, 'POST', newRecipe);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const deleteRecipe = async function (recipe) {
+  try {
+    removeBookmark(recipe);
+    await AJAX(`${API_URL}/${recipe.id}?key=${KEY}`, 'DELETE');
   } catch (err) {
     throw err;
   }

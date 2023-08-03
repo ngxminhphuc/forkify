@@ -94,12 +94,37 @@ const controlAddRecipe = async function (recipe) {
   }
 };
 
+const controlDeleteRecipe = async function () {
+  try {
+    recipeView.renderSpinner();
+    await model.deleteRecipe(model.state.recipe);
+
+    if (model.state.search.results.length > 1) {
+      resultsView.renderSpinner();
+      const pageNumber = model.state.search.currentPage;
+      await model.loadSearchResults(model.state.search.query);
+
+      resultsView.render(model.getSearchResults(pageNumber));
+      paginationView.render(model.state.search);
+    } else resultsView._renderMarkup('');
+
+    bookmarksView.render(model.state.bookmarks);
+    window.history.pushState(null, '', '/');
+
+    recipeView.renderMessage(`Recipe was successfully deleted!`);
+  } catch (err) {
+    console.error(`💥 ${err}`);
+    recipeView.renderError(err.message);
+  }
+};
+
 const init = function () {
   bookmarksView.addHandlerRender(controlLoadBookmarks);
 
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
+  recipeView.addHandlerDeleteRecipe(controlDeleteRecipe);
 
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);

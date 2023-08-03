@@ -27,7 +27,14 @@ class RecipeView extends View {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--bookmark');
       if (!btn) return;
+      handler();
+    });
+  }
 
+  addHandlerDeleteRecipe(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--delete');
+      if (!btn) return;
       handler();
     });
   }
@@ -85,6 +92,15 @@ class RecipeView extends View {
             <use href="${icons}#icon-user"></use>
           </svg>
         </div>
+
+        <button class="btn--round btn--delete ${
+          this._data.key ? '' : 'hidden'
+        }">
+          <svg>
+            <use href="${icons}#icon-trash-2"></use>
+          </svg>
+        </button>
+
         <button class="btn--round btn--bookmark">
           <svg>
             <use href="${icons}#icon-bookmark${

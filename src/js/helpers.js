@@ -8,11 +8,11 @@ const timeout = function (s) {
   });
 };
 
-export const AJAX = async function (url, uploadData) {
+export const AJAX = async function (url, method = '', uploadData = undefined) {
   try {
-    const fetchPromise = uploadData
+    const fetchPromise = method
       ? fetch(url, {
-          method: 'POST',
+          method,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -21,8 +21,13 @@ export const AJAX = async function (url, uploadData) {
       : fetch(url);
 
     const res = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
 
+    if (method === 'DELETE') {
+      if (!res.ok) throw new Error(`${res.status}`);
+      return res;
+    }
+
+    const data = await res.json();
     if (!res.ok) throw new Error(`${data.message} ${res.status}`);
 
     return data;

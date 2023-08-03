@@ -82,10 +82,22 @@ const controlAddRecipe = async function (recipe) {
     addRecipeView.renderSpinner();
 
     await model.uploadRecipe(recipe);
-
     recipeView.render(model.state.recipe);
+
     bookmarksView.render(model.state.bookmarks);
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    // If resultView rendered, reload query
+    if (model.state.search.results.length) {
+      resultsView.renderSpinner();
+      const pageNumber = model.state.search.currentPage;
+      await model.loadSearchResults(model.state.search.query);
+
+      const searchResults = model.getSearchResults(pageNumber);
+
+      resultsView.render(searchResults);
+      paginationView.render(model.state.search);
+    } else resultsView._renderMarkup('');
 
     addRecipeView.renderMessage();
   } catch (err) {

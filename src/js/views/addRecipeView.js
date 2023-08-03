@@ -1,4 +1,5 @@
 import View from './View.js';
+import icons from 'url:../../img/icons.svg';
 
 class AddRecipeView extends View {
   _parentElement = document.querySelector('.upload');
@@ -141,7 +142,7 @@ class AddRecipeView extends View {
 
       <button class="btn upload__btn">
         <svg>
-          <use href="src/img/icons.svg#icon-upload-cloud"></use>
+          <use href="${icons}#icon-upload-cloud"></use>
         </svg>
         <span>Upload</span>
       </button>

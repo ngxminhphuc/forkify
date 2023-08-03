@@ -1,4 +1,5 @@
 import * as model from './model.js';
+
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
@@ -76,8 +77,21 @@ const controlLoadBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (recipe) {
-  console.log(recipe);
+const controlAddRecipe = async function (recipe) {
+  try {
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(recipe);
+
+    recipeView.render(model.state.recipe);
+    bookmarksView.render(model.state.bookmarks);
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    addRecipeView.renderMessage();
+  } catch (err) {
+    console.error(`💥 ${err}`);
+    addRecipeView.renderError(err.message);
+  }
 };
 
 const init = function () {

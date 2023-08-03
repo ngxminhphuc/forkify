@@ -111,14 +111,22 @@ const controlDeleteRecipe = async function () {
     recipeView.renderSpinner();
     await model.deleteRecipe(model.state.recipe);
 
-    if (model.state.search.results.length > 1) {
+    if (model.state.search.results.length > 0) {
       resultsView.renderSpinner();
       const pageNumber = model.state.search.currentPage;
       await model.loadSearchResults(model.state.search.query);
 
-      resultsView.render(model.getSearchResults(pageNumber));
+      if (model.state.search.results.length > 1)
+        resultsView.render(model.getSearchResults(pageNumber));
+
       paginationView.render(model.state.search);
-    } else resultsView._renderMarkup('');
+    }
+
+    if (
+      model.state.search.results.length === 0 ||
+      model.state.search.results.length === 1
+    )
+      resultsView._renderMarkup('');
 
     bookmarksView.render(model.state.bookmarks);
     window.history.pushState(null, '', '/');

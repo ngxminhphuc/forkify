@@ -19,7 +19,11 @@ class PaginationView extends View {
       this._data.results.length / this._data.resultsPerPage
     );
 
-    if (numPages < 2) return '';
+    const curPageMarkup = `
+      <div class="pagination__current">${this._data.currentPage}</div>
+    `;
+
+    if (numPages < 2) return curPageMarkup;
 
     const btnPrev = `
       <button class="btn--inline pagination__btn--prev" data-go-to=${
@@ -43,11 +47,11 @@ class PaginationView extends View {
       </button>
       `;
 
-    if (this._data.currentPage === 1) return btnNext;
+    if (this._data.currentPage === 1) return curPageMarkup + btnNext;
 
-    if (this._data.currentPage === numPages) return btnPrev;
+    if (this._data.currentPage === numPages) return btnPrev + curPageMarkup;
 
-    return btnPrev + btnNext;
+    return btnPrev + curPageMarkup + btnNext;
   }
 }
 

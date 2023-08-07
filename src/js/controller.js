@@ -44,6 +44,7 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(`${query}`);
 
     resultsView.render(model.getSearchResults());
+    bookmarksView.update(model.state.bookmarks);
     paginationView.render(model.state.search);
   } catch (err) {
     console.error(`💥 ${err}`);
@@ -83,8 +84,6 @@ const controlAddRecipe = async function (recipe) {
 
     await model.uploadRecipe(recipe);
     recipeView.render(model.state.recipe);
-
-    bookmarksView.render(model.state.bookmarks);
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
     // If resultView rendered, reload query
@@ -99,6 +98,7 @@ const controlAddRecipe = async function (recipe) {
       paginationView.render(model.state.search);
     } else resultsView._renderMarkup('');
 
+    bookmarksView.render(model.state.bookmarks);
     addRecipeView.renderMessage();
   } catch (err) {
     console.error(`💥 ${err}`);
@@ -116,17 +116,12 @@ const controlDeleteRecipe = async function () {
       const pageNumber = model.state.search.currentPage;
       await model.loadSearchResults(model.state.search.query);
 
-      if (model.state.search.results.length > 1)
+      if (model.state.search.results.length >= 1)
         resultsView.render(model.getSearchResults(pageNumber));
+      else resultsView._renderMarkup('');
 
       paginationView.render(model.state.search);
     }
-
-    if (
-      model.state.search.results.length === 0 ||
-      model.state.search.results.length === 1
-    )
-      resultsView._renderMarkup('');
 
     bookmarksView.render(model.state.bookmarks);
     window.history.pushState(null, '', '/');

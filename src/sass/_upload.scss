@@ -23,6 +23,34 @@
     border: none;
     background: none;
   }
+
+  &.warning-window {
+    max-width: 40rem;
+
+    .warning {
+      padding: 0;
+    }
+
+    .warning__buttons {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 3.5rem;
+
+      button {
+        font-size: 1.6rem;
+        padding: 1.2rem 1.6rem;
+        text-transform: none;
+      }
+
+      .btn--confirm {
+        color: $color-primary;
+        background: none;
+        // background-color: $color-grey-light-1;
+        border: 2px solid $color-primary;
+      }
+    }
+  }
 }
 
 .overlay {

@@ -7,6 +7,35 @@ class RecipeView extends View {
   _message = '';
   _errorMessage = 'We could not find that recipe. Please try another one!';
 
+  _window = document.querySelector('.add-recipe-window.warning-window');
+  _overlay = document.querySelector('.overlay.overlay-warning');
+  _btnDelete = document.querySelector('.btn--delete');
+  _btnConfirm = document.querySelector('.btn--confirm');
+  _btnCancel = document.querySelector('.btn--cancel');
+
+  constructor() {
+    super();
+    this._addHandlerShowWindow();
+    this._addHandlerHideWindow();
+  }
+
+  _toggleWindow() {
+    this._overlay.classList.toggle('hidden');
+    this._window.classList.toggle('hidden');
+  }
+
+  _addHandlerShowWindow() {
+    this._parentElement.addEventListener('click', e => {
+      const btn = e.target.closest('.btn--delete');
+      if (!btn) return;
+      this._toggleWindow();
+    });
+  }
+
+  _addHandlerHideWindow() {
+    this._btnCancel.addEventListener('click', this._toggleWindow.bind(this));
+  }
+
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(eventName =>
       window.addEventListener(eventName, handler)
@@ -32,9 +61,11 @@ class RecipeView extends View {
   }
 
   addHandlerDeleteRecipe(handler) {
-    this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--delete');
+    this._window.addEventListener('click', e => {
+      const btn = e.target.closest('.btn--confirm');
       if (!btn) return;
+
+      this._toggleWindow();
       handler();
     });
   }
@@ -92,6 +123,12 @@ class RecipeView extends View {
             <use href="${icons}#icon-user"></use>
           </svg>
         </div>
+
+        <button class="btn--round btn--edit ${this._data.key ? '' : 'hidden'}">
+          <svg>
+            <use href="${icons}#icon-edit-3"></use>
+          </svg>
+        </button>
 
         <button class="btn--round btn--delete ${
           this._data.key ? '' : 'hidden'

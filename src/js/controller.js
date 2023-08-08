@@ -10,6 +10,7 @@ import deleteRecipeView from './views/deleteRecipeView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import { async } from 'regenerator-runtime';
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -135,16 +136,30 @@ const controlDeleteRecipe = async function () {
   }
 };
 
-const init = function () {
+const deleteRecipe = async function () {
+  try {
+    await model.deleteRecipe(model.state.recipe);
+  } catch (err) {
+    console.error(`💥 ${err}`);
+    addRecipeView.renderError(err.message);
+  }
+};
+
+const controlEditRecipe = function () {
+  addRecipeView.renderEditRecipe(model.state.recipe);
+};
+
+const init = async function () {
   bookmarksView.addHandlerRender(controlLoadBookmarks);
 
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
+  recipeView.addHandlerEditRecipe(controlEditRecipe);
 
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
-  addRecipeView.addHandlerUpload(controlAddRecipe);
+  addRecipeView.addHandlerUpload(controlAddRecipe, deleteRecipe);
 
   deleteRecipeView.addHandlerDeleteRecipe(controlDeleteRecipe);
 };

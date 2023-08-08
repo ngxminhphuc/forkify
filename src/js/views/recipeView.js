@@ -31,6 +31,14 @@ class RecipeView extends View {
     });
   }
 
+  addHandlerEditRecipe(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--edit');
+      if (!btn) return;
+      handler();
+    });
+  }
+
   _generateMarkup() {
     return `
       <figure class="recipe__fig">
@@ -84,6 +92,12 @@ class RecipeView extends View {
             <use href="${icons}#icon-user"></use>
           </svg>
         </div>
+
+        <button class="btn--round btn--edit ${this._data.key ? '' : 'hidden'}">
+          <svg>
+            <use href="${icons}#icon-edit-3"></use>
+          </svg>
+        </button>
 
         <button class="btn--round btn--delete ${
           this._data.key ? '' : 'hidden'

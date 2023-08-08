@@ -6,6 +6,7 @@ import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
+import deleteRecipeView from './views/deleteRecipeView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -92,9 +93,10 @@ const controlAddRecipe = async function (recipe) {
       const pageNumber = model.state.search.currentPage;
       await model.loadSearchResults(model.state.search.query);
 
-      const searchResults = model.getSearchResults(pageNumber);
+      if (model.state.search.results.length >= 1)
+        resultsView.render(model.getSearchResults(pageNumber));
+      else resultsView._renderMarkup('');
 
-      resultsView.render(searchResults);
       paginationView.render(model.state.search);
     } else resultsView._renderMarkup('');
 
@@ -111,7 +113,7 @@ const controlDeleteRecipe = async function () {
     recipeView.renderSpinner();
     await model.deleteRecipe(model.state.recipe);
 
-    if (model.state.search.results.length > 0) {
+    if (model.state.search.results.length) {
       resultsView.renderSpinner();
       const pageNumber = model.state.search.currentPage;
       await model.loadSearchResults(model.state.search.query);
@@ -121,7 +123,7 @@ const controlDeleteRecipe = async function () {
       else resultsView._renderMarkup('');
 
       paginationView.render(model.state.search);
-    }
+    } else resultsView._renderMarkup('');
 
     bookmarksView.render(model.state.bookmarks);
     window.history.pushState(null, '', '/');
@@ -139,11 +141,12 @@ const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
-  recipeView.addHandlerDeleteRecipe(controlDeleteRecipe);
 
   searchView.addSearchHandler(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
+
+  deleteRecipeView.addHandlerDeleteRecipe(controlDeleteRecipe);
 };
 
 init();

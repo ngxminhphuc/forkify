@@ -18,12 +18,12 @@ class PaginationView extends View {
     const numPages = Math.ceil(
       this._data.results.length / this._data.resultsPerPage
     );
+    if (numPages === 0) return '';
 
     const curPageMarkup = `
       <div class="pagination__current">${this._data.currentPage}</div>
     `;
-
-    if (numPages < 2) return curPageMarkup;
+    if (numPages === 1) return curPageMarkup;
 
     const btnPrev = `
       <button class="btn--inline pagination__btn--prev" data-go-to=${

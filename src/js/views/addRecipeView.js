@@ -107,7 +107,7 @@ class AddRecipeView extends View {
           name="image"
           type="text"
           id="upload-image"
-          placeholder="e.g. https://my-recipe-url.com"
+          placeholder="e.g. https://my-recipe.com/image.jpg"
         />
         <label for="upload-publisher">Publisher</label>
         <input

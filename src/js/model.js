@@ -109,7 +109,7 @@ export const removeBookmark = function (recipe) {
   persistBookmarks();
 };
 
-export const updateBookmark = function (recipe) {
+export const updateServingsBookmarked = function (recipe) {
   if (!recipe.bookmarked) return;
 
   const index = state.bookmarks.findIndex(el => el.id === recipe.id);
@@ -117,9 +117,29 @@ export const updateBookmark = function (recipe) {
   persistBookmarks();
 };
 
-export const loadBookmarks = function () {
-  const bookmarks = localStorage.getItem('bookmarks');
-  if (bookmarks) state.bookmarks = JSON.parse(bookmarks);
+export const loadBookmarks = async function () {
+  try {
+    const bookmarks = localStorage.getItem('bookmarks');
+    if (!bookmarks) return;
+
+    const userRecipe = await Promise.allSettled(
+      JSON.parse(bookmarks)
+        .filter(bookmark => bookmark.hasOwnProperty('key'))
+        .map(recipe => fetch(`${API_URL}/${recipe.id}?key=${KEY}`))
+    );
+
+    const idRegex = /\/recipes\/(\w+)\?/;
+
+    const deadRecipe = userRecipe
+      .filter(res => res.status === 'fulfilled' && !res.value.ok)
+      .map(recipe => recipe.value.url.match(idRegex)?.[1]);
+
+    state.bookmarks = JSON.parse(bookmarks).filter(
+      bookmarked => !deadRecipe.includes(bookmarked.id)
+    );
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const uploadRecipe = async function (recipe) {

@@ -62,7 +62,7 @@ const controlPagination = function (pageNumber) {
 const controlServings = function (newServings) {
   model.updateServings(newServings);
   recipeView.update(model.state.recipe);
-  model.updateBookmark(model.state.recipe);
+  model.updateServingsBookmarked(model.state.recipe);
 };
 
 const controlAddBookmark = function () {
@@ -75,9 +75,16 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlLoadBookmarks = function () {
-  model.loadBookmarks();
-  bookmarksView.render(model.state.bookmarks);
+const controlLoadBookmarks = async function () {
+  try {
+    await model.loadBookmarks();
+    bookmarksView.render(model.state.bookmarks);
+  } catch (err) {
+    console.error(`💥 ${err}`);
+    bookmarksView.renderError(
+      'Something went wrong. Please reload and try again.'
+    );
+  }
 };
 
 const controlAddRecipe = async function (recipe) {

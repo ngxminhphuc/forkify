@@ -25,13 +25,13 @@
 
 ## :dart: About
 
+> Inspired by [forkify-v2 — Jonas Schmedtmann](https://forkify-v2.netlify.app/) while continuing to practice more about HTML5, CSS3, SASS/SCSS and Javascript skills, this project is built upon the robust foundation of [Forkify API v2](https://forkify-api.herokuapp.com/v2/), which offers helpful features. This includes recipe searching functionality across a diverse collection, as well as the ability to interact with recipes through actions such as creation and deletion.
+
 **forkify** is a web application designed to simplify your cooking journey, your go-to platform for discovering, saving, and preparing a wide range of delicious recipes while providing step-by-step instructions, ingredient lists, and serving suggestions for each recipe.
 
 With an extensive collection of recipes from around the world, **forkify** gives a chance to explore new flavors, learn cooking techniques, and create memorable meals. Visit now at [forkify // Search over 1,000,000 recipes](https://forkify-ngxminhphuc.netlify.app) for more experience.
 
 ![forkify demo](https://github.com/ngxminhphuc/forkify/assets/55644028/10c6e7d5-8829-4a9f-9620-7dc929c28f18)
-
-> Inspired by [forkify-v2 — Jonas Schmedtmann](https://forkify-v2.netlify.app/) while continuing to practice more about HTML5, CSS3, SASS/SCSS and Javascript skills, this project is built upon the robust foundation of [Forkify API v2](https://forkify-api.herokuapp.com/v2/), which offers helpful features. This includes recipe searching functionality across a diverse collection, as well as the ability to interact with recipes through actions such as creation and deletion.
 
 ## :sparkles: Features
 
